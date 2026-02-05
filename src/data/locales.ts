@@ -21,6 +21,13 @@ export const translations = {
     music_waiting: "QRコードをかざしてください",
     music_playing: "再生中",
     music_detected: "検知",
+    music_stop: "音楽を停止",
+    label_wood_material: "素材",
+
+    // 樹種名の翻訳マッピング
+    wood_sugi: "スギ",
+    wood_kiri: "キリ",
+    wood_kurumi: "クルミ",
     
     // Level 1
     lv1_status: "状態: 新品 (Lv.1)",
@@ -78,7 +85,7 @@ export const translations = {
     scan_guide: "Place Item & QR in frame\nand press button",
     scan_analyzing: "Analyzing...",
     scan_back: "Back to Home",
-    scan_cancel: "Cancel",
+    scan_cancel: "Back to Home",
     scan_rescan: "Rescan",
     scan_open_page: "Open Page",
     scan_item_unknown: "Item not registered",
@@ -87,6 +94,12 @@ export const translations = {
     music_waiting: "Scan QR Code",
     music_playing: "Now Playing",
     music_detected: "Detected",
+    music_stop: "Stop Music",
+    label_wood_material: "Material",
+
+    wood_sugi: "Cedar",
+    wood_kiri: "Paulownia",
+    wood_kurumi: "Walnut",
 
     // Level 1
     lv1_status: "Status: NEW (Lv.1)",
@@ -123,7 +136,7 @@ export const translations = {
     label_character: "Character",
     label_value: "Value",
 
-    val_wood_oak: "Solid Oak",
+    val_wood_oak: "Oak",
     val_years_2: "Approx. 2 Years",
     val_years_10: "Over 10 Years",
     val_tone_amber: "Rich Amber Patina",

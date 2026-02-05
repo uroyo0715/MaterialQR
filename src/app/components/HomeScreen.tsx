@@ -37,7 +37,7 @@ export function HomeScreen({ onSelectMode, lang, toggleLang }: HomeScreenProps) 
 
           <button 
             onClick={() => onSelectMode('aging')}
-            className="w-full py-5 bg-amber-900 text-white font-serif text-lg rounded-lg shadow-xl hover:bg-amber-800 flex items-center justify-center gap-2"
+            className="w-full py-4 bg-white border border-gray-200 text-gray-800 font-serif rounded-lg shadow-sm hover:bg-gray-50 flex items-center justify-center gap-2"
           >
             {t.mode_aging}
           </button>

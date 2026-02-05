@@ -72,7 +72,7 @@ export function useCameraScanner() {
                     inversionAttempts: "dontInvert",
                 });
                 
-                // ★修正箇所: QRがない場合はnullにする
+                // QRがない場合はnullにする
                 const newQrData = code ? code.data : null;
 
                 setScanResult(prev => {
@@ -95,7 +95,7 @@ export function useCameraScanner() {
         };
     }, []);
 
-    // 音楽再生 (MasterDB対応)
+    // 音楽再生
     useEffect(() => {
         if (!scanResult.qrData) {
             // QRが外れたら音楽を止める場合はここに処理を追加（今回は再生継続か、ループ制御）
@@ -111,12 +111,10 @@ export function useCameraScanner() {
             if (variation && variation.musicId) {
                 const song = musicDatabase[variation.musicId];
                 if (song) {
-                    // ここでも musicData の variations を使うか、直接指定するか
                     audioPath = song.variations[scanResult.woodType] || song.variations.default;
                 }
             }
         } else {
-            // 後方互換性: 直接 SONG_001 が来た場合
             const song = musicDatabase[scanResult.qrData];
             if (song) {
                 audioPath = song.variations[scanResult.woodType] || song.variations.default;
