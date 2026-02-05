@@ -58,13 +58,26 @@ export function useCameraScanner() {
 
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 
+                // --- ここから修正 ---
                 const sampleSize = 40;
                 const startX = Math.max(0, (canvas.width / 2) - (sampleSize / 2));
                 const startY = Math.max(0, (canvas.height * 0.3) - (sampleSize / 2));
-                const pixelIndex = (Math.floor(startY + sampleSize/2) * canvas.width + Math.floor(startX + sampleSize/2)) * 4;
-                const r = imageData.data[pixelIndex];
-                const g = imageData.data[pixelIndex + 1];
-                const b = imageData.data[pixelIndex + 2];
+                
+                // 指定エリアのピクセルデータを取得
+                const sampleData = ctx.getImageData(startX, startY, sampleSize, sampleSize).data;
+                
+                let rSum = 0, gSum = 0, bSum = 0;
+                for(let i=0; i < sampleData.length; i += 4) {
+                    rSum += sampleData[i];
+                    gSum += sampleData[i+1];
+                    bSum += sampleData[i+2];
+                }
+                
+                const count = sampleData.length / 4;
+                const r = rSum / count;
+                const g = gSum / count;
+                const b = bSum / count;
+                // --- ここまで修正 ---
                 
                 const woodType = detectMaterial(r, g, b);
 

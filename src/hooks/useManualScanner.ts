@@ -10,20 +10,14 @@ export interface ScanResult {
 export function useManualScanner() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
-  // 自分でカメラを初期化せず、グローバルなストリームをもらう
   const { stream, isReady } = useCamera();
 
-  // ストリームが来たらvideoタグにセット
   useEffect(() => {
     if (videoRef.current && stream && isReady) {
       videoRef.current.srcObject = stream;
-      // 自動再生ポリシー対策のため catch を入れる
       videoRef.current.play().catch(e => console.log("Video play error:", e));
     }
   }, [stream, isReady]);
-
-  // --- 以下、解析ロジックは以前と同じ
 
   const captureAndAnalyze = (): ScanResult => {
     const video = videoRef.current;
@@ -47,19 +41,25 @@ export function useManualScanner() {
           inversionAttempts: "dontInvert",
         });
 
-        // 2. 樹種判定（簡易版）
-        // 中央付近の色を取得
+        // 2. 樹種判定（修正版：40x40ピクセル平均）
+        const sampleSize = 40;
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
-        const p = ctx.getImageData(centerX - 5, centerY - 5, 10, 10).data;
+        
+        // 中心からオフセットして領域を取得
+        const offset = Math.floor(sampleSize / 2);
+        const p = ctx.getImageData(centerX - offset, centerY - offset, sampleSize, sampleSize).data;
         
         let rSum = 0, gSum = 0, bSum = 0;
         for(let i=0; i<p.length; i+=4) {
             rSum += p[i]; gSum += p[i+1]; bSum += p[i+2];
         }
-        const avgR = rSum / (p.length/4);
-        const avgG = gSum / (p.length/4);
-        const avgB = bSum / (p.length/4);
+        
+        // ピクセル数で割って平均を算出
+        const pixelCount = p.length / 4;
+        const avgR = rSum / pixelCount;
+        const avgG = gSum / pixelCount;
+        const avgB = bSum / pixelCount;
         const brightness = (avgR + avgG + avgB) / 3;
 
         let detectedType = "sugi";
