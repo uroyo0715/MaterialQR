@@ -5,6 +5,8 @@ import { useManualScanner } from '../../hooks/useManualScanner';
 import { masterDatabase } from '../../data/masterData';
 import { musicDatabase } from '../../data/musicData'; 
 import { translations, Language } from '../../data/locales';
+// 画像表示用コンポーネントをインポート
+import { ImageWithFallback } from './figma/ImageWithFallback';
 
 interface MusicScanScreenProps {
   onBack: () => void;
@@ -17,7 +19,8 @@ export function MusicScanScreen({ onBack, lang }: MusicScanScreenProps) {
 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTrack, setCurrentTrack] = useState<{ title: string; wood: string } | null>(null);
+  // imageを追加
+  const [currentTrack, setCurrentTrack] = useState<{ title: string; wood: string; image?: string } | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -105,7 +108,8 @@ export function MusicScanScreen({ onBack, lang }: MusicScanScreenProps) {
               const audioSrc = (songData.variations as any)[detectedWood] || songData.variations.default;
               
               if (audioSrc) {
-                playMusic(audioSrc, songData.title, detectedWood);
+                // 画像パスも渡す
+                playMusic(audioSrc, songData.title, detectedWood, songData.image);
               } else {
                 setStatusMessage("音楽ファイルが見つかりません");
               }
@@ -129,7 +133,8 @@ export function MusicScanScreen({ onBack, lang }: MusicScanScreenProps) {
     }, 1000);
   };
 
-  const playMusic = (src: string, title: string, wood: string) => {
+  // 引数に image を追加
+  const playMusic = (src: string, title: string, wood: string, image?: string) => {
     if (audioRef.current) {
       audioRef.current.pause();
     }
@@ -141,7 +146,8 @@ export function MusicScanScreen({ onBack, lang }: MusicScanScreenProps) {
       .then(() => {
         audioRef.current = audio;
         setIsPlaying(true);
-        setCurrentTrack({ title, wood });
+        // ステートに保存
+        setCurrentTrack({ title, wood, image });
       })
       .catch(err => {
         console.error("Playback failed:", err);
@@ -149,33 +155,6 @@ export function MusicScanScreen({ onBack, lang }: MusicScanScreenProps) {
       });
   };
   
-  const fadeOutAndStop = () => {
-  const audio = audioRef.current;
-  if (!audio) return;
-
-  // 1. フェードアウト処理
-  const fadeDuration = 1000; // 1秒かけて消す
-  const stepTime = 50; 
-  const volumeStep = audio.volume / (fadeDuration / stepTime);
-
-  const fadeInterval = setInterval(() => {
-    // 音量が0より大きければ下げる
-    if (audio.volume > volumeStep) {
-      audio.volume -= volumeStep;
-    } else {
-      // 2. 音量が0になったら停止
-      clearInterval(fadeInterval);
-      audio.pause();
-      audio.volume = 1.0; // 次回のために音量を戻す
-      audioRef.current = null;
-      
-      // State更新
-      setIsPlaying(false);
-      setCurrentTrack(null);
-    }
-  }, stepTime);
-};
-
   const stopMusic = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -187,8 +166,9 @@ export function MusicScanScreen({ onBack, lang }: MusicScanScreenProps) {
 
   return (
     <div className="fixed inset-0 bg-black flex flex-col">
-      <div className="relative flex-1 bg-black overflow-hidden">
-        <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover opacity-80" muted playsInline />
+      <div className="relative flex-1 bg-black overflow-hidden flex items-center justify-center">
+        {/* 背景のカメラ映像（再生中は少し暗くする） */}
+        <video ref={videoRef} className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isPlaying ? 'opacity-30 blur-sm' : 'opacity-80'}`} muted playsInline />
         <canvas ref={canvasRef} className="hidden" />
 
         {!isPlaying && (
@@ -205,21 +185,38 @@ export function MusicScanScreen({ onBack, lang }: MusicScanScreenProps) {
           </div>
         )}
 
-        {/* 再生中の表示 */}
+        {/* 再生中の表示（デザイン改良） */}
         {isPlaying && currentTrack && (
-           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in">
-             <div className="absolute w-64 h-64 rounded-full bg-blue-500/20 animate-ping"></div>
-             <div className="absolute w-48 h-48 rounded-full bg-blue-400/30 animate-pulse"></div>
+           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-4">
              
-             <div className="z-20 text-center text-white p-6 bg-black/50 rounded-2xl border border-white/10 backdrop-blur-md">
-               <div className="text-4xl mb-4">🎵</div>
-               <h3 className="text-xl font-bold mb-1">{currentTrack.title}</h3>
+             {/* アルバムアート/写真表示エリア */}
+             <div className="relative w-72 h-72 mb-8 shadow-2xl rounded-xl overflow-hidden border border-white/10 group">
+                {/* 背景エフェクト */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 animate-pulse"></div>
+                
+                {currentTrack.image ? (
+                  <ImageWithFallback 
+                    src={currentTrack.image} 
+                    alt={currentTrack.title}
+                    className="w-full h-full object-cover transition-transform duration-[20s] ease-linear transform group-hover:scale-110"
+                  />
+                ) : (
+                  // 画像がない場合のダミー表示（音符アイコンなど）
+                  <div className="w-full h-full flex items-center justify-center bg-stone-800">
+                    <span className="text-6xl">🎵</span>
+                  </div>
+                )}
+             </div>
+
+             {/* 曲情報とコントロール */}
+             <div className="text-center text-white p-6 bg-black/60 rounded-3xl border border-white/10 backdrop-blur-xl w-[90%] max-w-sm shadow-xl">
+               <h3 className="text-2xl font-bold mb-2 drop-shadow-md">{currentTrack.title}</h3>
                <p className="text-sm text-white/70 uppercase tracking-widest mb-6">
-                 {(t as any).label_wood_material || "Material"}: <span className="text-blue-400 font-bold">{getWoodDisplayName(currentTrack.wood)}</span>
+                 {(t as any).label_wood_material || "Material"}: <span className="text-blue-400 font-bold ml-2">{getWoodDisplayName(currentTrack.wood)}</span>
                </p>
                <button 
                  onClick={stopMusic}
-                 className="px-8 py-3 bg-white text-black rounded-full font-bold hover:bg-gray-200 transition-colors"
+                 className="px-8 py-3 bg-white text-black rounded-full font-bold hover:bg-gray-200 transition-colors active:scale-95"
                >
                  {(t as any).music_stop || "Stop Music"}
                </button>

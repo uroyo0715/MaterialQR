@@ -1,6 +1,7 @@
-export const musicDatabase: Record<string, { title: string; variations: Record<string, string> }> = {
+export const musicDatabase: Record<string, { title: string; image?: string; variations: Record<string, string> }> = {
     "SONG_001": {
         "title": "Woodland Symphony",
+        "image": "/assets/images/Music-AlbumCover.png", 
         "variations": {
             "kiri": "/assets/music/maou_bgm_8bit24.mp3",
             "kurumi": "/assets/music/maou_bgm_neorock79.mp3",
