@@ -2,7 +2,7 @@ export type Language = 'ja' | 'en';
 
 export const translations = {
   ja: {
-    app_title: "QR Texture App",
+    app_title: "Material QR",
     mode_select: "モード選択",
     mode_url: "🔗 URL変化",
     mode_aging: "🌲 経年変化",
@@ -32,9 +32,9 @@ export const translations = {
     // Level 1
     lv1_status: "状態: 新品 (Lv.1)",
     lv1_story_title: "ストーリー: この椅子について",
-    lv1_story_text: "最高級のオーク材を使用し、職人の手によって組み立てられました。あなたの生活に寄り添い、共に時を刻む準備ができています。",
+    lv1_story_text: "最高級のスギ材を使用し、職人の手によって組み立てられました。あなたの生活に寄り添い、共に時を刻む準備ができています。",
     lv1_info_title: "製品情報",
-    lv1_button: "製品登録する",
+    lv1_button: "ウェブサイト",
     
     // Level 2
     lv2_status: "状態: ユーズド (Lv.2)",
@@ -64,7 +64,7 @@ export const translations = {
     label_character: "特徴",
     label_value: "価値",
 
-    val_wood_oak: "オーク無垢材",
+    val_wood_oak: "スギ",
     val_years_2: "約 2年",
     val_years_10: "10年以上",
     val_tone_amber: "豊かな飴色",
@@ -75,7 +75,7 @@ export const translations = {
     val_value_unique: "一点もの",
   },
   en: {
-    app_title: "QR Texture App",
+    app_title: "Material QR",
     mode_select: "Select Mode",
     mode_url: "🔗 URL Mode",
     mode_aging: "🌲 Aging Mode",
@@ -104,9 +104,9 @@ export const translations = {
     // Level 1
     lv1_status: "Status: NEW (Lv.1)",
     lv1_story_title: "Story: About This Chair",
-    lv1_story_text: "Crafted from the finest oak by skilled artisans. It is ready to accompany you and mark time together in your life.",
+    lv1_story_text: "Crafted from the finest cedar by skilled artisans. It is ready to accompany you and mark time together in your life.",
     lv1_info_title: "Product Information",
-    lv1_button: "Register Product",
+    lv1_button: "Web Site",
 
     // Level 2
     lv2_status: "Status: USED (Lv.2)",
@@ -118,7 +118,7 @@ export const translations = {
     // Level 3
     lv3_status: "Status: VINTAGE (Lv.3)",
     lv3_story_title: "Story: Thank You for the Journey",
-    lv3_story_text: "We logged the oak eloquent you with of our life and the hope you love the stories held of our family's chair. The chair that travel with personal history, ready for a timeless again.",
+    lv3_story_text: "We logged the cedar eloquent you with of our life and the hope you love the stories held of our family's chair. The chair that travel with personal history, ready for a timeless again.",
     lv3_info_title: "Vintage Heritage",
     lv3_button: "Share Your Story",
 
@@ -136,7 +136,7 @@ export const translations = {
     label_character: "Character",
     label_value: "Value",
 
-    val_wood_oak: "Oak",
+    val_wood_oak: "Cedar",
     val_years_2: "Approx. 2 Years",
     val_years_10: "Over 10 Years",
     val_tone_amber: "Rich Amber Patina",

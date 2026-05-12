@@ -1,5 +1,5 @@
-import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { translations, Language } from "../../data/locales";
+import { ProcessedVintageImage } from "./ProcessedVintageImage";
 
 export function Level3Vintage({ lang }: { lang: Language }) {
   const t = translations[lang];
@@ -13,14 +13,14 @@ export function Level3Vintage({ lang }: { lang: Language }) {
           backgroundBlendMode: 'multiply',
         }}
       >
-        <div className="relative h-[55%]" style={{ background: '#d4c4a8' }}>
-          <ImageWithFallback
-            src="https://images.unsplash.com/photo-1648994517760-19afc8c7ba00?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB3b29kZW4lMjBjaGFpcnxlbnwxfHx8fDE3NzAwMjkwNzV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+        <div className="relative h-[55%] bg-[#d4c4a8] overflow-hidden">
+          
+          <ProcessedVintageImage
+            src="/assets/images/Prototype.png"
             alt="Vintage Wooden Chair"
-            className="w-full h-full object-cover"
-            style={{ filter: 'sepia(0.6) contrast(1.15) brightness(0.85) saturate(0.7) hue-rotate(-5deg)' }}
+            className="w-full h-full object-contain relative z-10 translate-y-10"
           />
-          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 70% 20%, rgba(139,69,19,0.2) 0%, transparent 40%)' }} />
+          
         </div>
         <div className="h-[45%] flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto px-6 py-5">

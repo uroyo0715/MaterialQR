@@ -39,6 +39,8 @@ export default function App() {
       case 'sugi':
       default: setCurrentScreen('result_lv1'); break;
     }
+    // ↓強制表示用コード
+    // setCurrentScreen('result_lv3');
   };
 
   const BackToHomeButton = () => (

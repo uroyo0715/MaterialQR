@@ -22,7 +22,7 @@ export function useManualScanner() {
   const captureAndAnalyze = (): ScanResult => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    
+
     if (!video || !canvas || !isReady) {
       return { woodType: 'default', qrData: null };
     }
@@ -33,9 +33,9 @@ export function useManualScanner() {
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
+
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        
+
         // 1. QRコード読み取り
         const code = jsQR(imageData.data, imageData.width, imageData.height, {
           inversionAttempts: "dontInvert",
@@ -45,16 +45,16 @@ export function useManualScanner() {
         const sampleSize = 40;
         const centerX = Math.floor(canvas.width / 2);
         const centerY = Math.floor(canvas.height / 2);
-        
+
         // 中心からオフセットして領域を取得
         const offset = Math.floor(sampleSize / 2);
         const p = ctx.getImageData(centerX - offset, centerY - offset, sampleSize, sampleSize).data;
-        
+
         let rSum = 0, gSum = 0, bSum = 0;
-        for(let i=0; i<p.length; i+=4) {
-            rSum += p[i]; gSum += p[i+1]; bSum += p[i+2];
+        for (let i = 0; i < p.length; i += 4) {
+          rSum += p[i]; gSum += p[i + 1]; bSum += p[i + 2];
         }
-        
+
         // ピクセル数で割って平均を算出
         const pixelCount = p.length / 4;
         const avgR = rSum / pixelCount;
@@ -62,14 +62,26 @@ export function useManualScanner() {
         const avgB = bSum / pixelCount;
         const brightness = (avgR + avgG + avgB) / 3;
 
-        let detectedType = "sugi";
-        if (brightness > 180) detectedType = "kiri";
-        else if (brightness < 100) detectedType = "kurumi";
-        else if (avgR > avgG + 20) detectedType = "sugi";
+        let detectedType = "unknown";
 
+        if (brightness > 120) {
+          detectedType = "kiri";
+        } else if (brightness < 100) {
+          detectedType = "kurumi";
+        } else {
+          // 2. 明るさが中間（100〜120）の場合の処理を明示する
+          if (avgR > avgG + 20) {
+            detectedType = "sugi";
+          } else {
+            // 赤みが足りない場合はどうするか決める
+            // 例：ナラ（Oak）などにする、または判定不能とする
+            detectedType = "oak"; // 仮
+          }
+        }
+        
         return {
-            woodType: detectedType,
-            qrData: code ? code.data : null
+          woodType: detectedType,
+          qrData: code ? code.data : null
         };
       }
     }

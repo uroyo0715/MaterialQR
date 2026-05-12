@@ -1,9 +1,6 @@
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+// src/app/components/Level1New.tsx
+import { ProcessedNewImage } from "./ProcessedNewImage"; // 新規作成したコンポーネント
 import { translations, Language } from '../../data/locales';
-
-interface Level1NewProps {
-  lang: Language;
-}
 
 export function Level1New({ lang }: { lang: Language }) {
   const t = translations[lang];
@@ -11,11 +8,14 @@ export function Level1New({ lang }: { lang: Language }) {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="w-full max-w-sm bg-white shadow-2xl overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
-        <div className="relative h-[55%] bg-gray-50">
-          <ImageWithFallback
-            src="https://images.unsplash.com/photo-1648994517760-19afc8c7ba00?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB3b29kZW4lMjBjaGFpcnxlbnwxfHx8fDE3NzAwMjkwNzV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+        <div className="relative h-[55%] bg-gray-50 overflow-hidden">
+          <ProcessedNewImage
+            src="/assets/images/Prototype.png" // 統一してassetから読み込む場合
+            // もしURLを使うなら元のURLに戻してください:
+            // src="https://images.unsplash.com/photo-..."
             alt="Modern Wooden Chair"
-            className="w-full h-full object-cover"
+            // object-contain に変更し、translate-y-10 で位置調整
+            className="w-full h-full object-contain translate-y-10"
           />
         </div>
         <div className="h-[45%] flex flex-col overflow-hidden">

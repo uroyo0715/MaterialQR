@@ -1,4 +1,5 @@
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+// src/app/components/Level2Used.tsx
+import { ProcessedUsedImage } from "./ProcessedUsedImage"; // 新規作成したコンポーネント
 import { translations, Language } from "../../data/locales";
 
 export function Level2Used({ lang }: { lang: Language }) {
@@ -7,12 +8,12 @@ export function Level2Used({ lang }: { lang: Language }) {
   return (
     <div className="min-h-screen bg-amber-100 flex items-center justify-center p-4">
       <div className="w-full max-w-sm shadow-2xl overflow-hidden" style={{ aspectRatio: '9/19.5', background: 'linear-gradient(to bottom, #faf8f3, #f5f1e8)' }}>
-        <div className="relative h-[55%] bg-amber-50/50">
-          <ImageWithFallback
-            src="https://images.unsplash.com/photo-1648994517760-19afc8c7ba00?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB3b29kZW4lMjBjaGFpcnxlbnwxfHx8fDE3NzAwMjkwNzV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+        <div className="relative h-[55%] bg-amber-50/50 overflow-hidden">
+          <ProcessedUsedImage
+            src="/assets/images/Prototype.png" // assetから読み込み
             alt="Used Wooden Chair"
-            className="w-full h-full object-cover"
-            style={{ filter: 'sepia(0.15) saturate(1.1) brightness(0.95) contrast(1.05)' }}
+            // object-contain に変更し、translate-y-10 で位置調整
+            className="w-full h-full object-contain translate-y-10"
           />
         </div>
         <div className="h-[45%] flex flex-col overflow-hidden">
